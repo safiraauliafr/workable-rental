@@ -1,0 +1,1001 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="ProcessTransaction" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_TransactionItem" Type="InArgument(ui:QueueItem)" />
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="in_DBConnection" Type="InArgument(ui:DatabaseConnection)" />
+    <x:Property Name="argument1" Type="InArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>707.2,1265.6</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ProcessTransaction_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="30">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>UiPath.Database</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Activities.DynamicUpdate</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>UiPath.Database.Activities</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Runtime.InteropServices</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="24">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualStudio.Services.Common</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>UiPath.Database</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>UiPath.Database.Activities</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:Annotation.AnnotationText="Description: In this file all other process specific files will be invoked. If an application exception occurs, the current transaction can be retried. If a BRE is thrown, the transaction will be skipped. Can be a flowchart or sequence. " DisplayName="ProcessTransaction" sap:VirtualizedContainerService.HintSize="667.2,1185.6" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="var_OcrSerialNumber" />
+      <Variable x:TypeArguments="x:String" Name="var_OcrTop" />
+      <Variable x:TypeArguments="x:String" Default="[in_TransactionItem.SpecificContent(&quot;IdWR&quot;).ToString]" Name="var_RequestID" />
+      <Variable x:TypeArguments="s:String[]" Default="[{&quot;7502570&quot;}]" Name="var_WRNumbers" />
+      <Variable x:TypeArguments="x:String" Name="var_DbRAType" />
+      <Variable x:TypeArguments="x:String" Name="var_WRDirectory" />
+      <Variable x:TypeArguments="x:String" Name="var_SapCurrency" />
+      <Variable x:TypeArguments="x:String" Name="var_SapWorkableAFM" />
+      <Variable x:TypeArguments="x:String" Name="var_SapPaymentPlan" />
+      <Variable x:TypeArguments="x:String" Name="var_SapWaiverStatus" />
+      <Variable x:TypeArguments="x:String" Name="var_SapPayerName" />
+      <Variable x:TypeArguments="x:String" Name="var_DbRACode" />
+      <Variable x:TypeArguments="x:String" Name="var_SapBusinessArea" />
+      <Variable x:TypeArguments="x:String" Name="var_DbDownPayment" />
+      <Variable x:TypeArguments="x:String" Name="var_DbBiayaMobilisasi" />
+      <Variable x:TypeArguments="x:String" Name="var_DbSecdep" />
+      <Variable x:TypeArguments="x:String" Name="var_OcrRateMonth" />
+      <Variable x:TypeArguments="x:String" Name="var_OcrAccountNumber" />
+      <Variable x:TypeArguments="x:String" Name="var_OcrPONumber" />
+      <Variable x:TypeArguments="x:String" Name="var_OcrPeriod" />
+      <Variable x:TypeArguments="x:String" Name="var_OcrNilaiPerjanjian" />
+      <Variable x:TypeArguments="x:String" Name="var_OcrUEPrice" />
+      <Variable x:TypeArguments="x:String" Name="var_OcrRateHour" />
+      <Variable x:TypeArguments="x:String" Name="var_OcrMinHour" />
+      <Variable x:TypeArguments="x:String" Name="var_OcrBeneficiaryBank" />
+      <Variable x:TypeArguments="x:String" Name="var_OcrCreditRating" />
+      <Variable x:TypeArguments="x:String" Name="var_OcrTransactionAmount" />
+      <Variable x:TypeArguments="x:String" Name="var_OcrResultTime" />
+      <Variable x:TypeArguments="x:String" Name="var_SapPayerID" />
+      <Variable x:TypeArguments="x:String" Name="var_SapModel" />
+      <Variable x:TypeArguments="x:String" Name="var_SapNetValue" />
+      <Variable x:TypeArguments="x:String" Name="var_SapSerialNumber" />
+      <Variable x:TypeArguments="x:String" Name="var_ICMStatus" />
+      <Variable x:TypeArguments="x:String" Name="var_DbContractNumber" />
+      <Variable x:TypeArguments="scg:List(x:String)" Default="[New List(Of String)]" Name="var_DbDocumentNumberList" />
+      <Variable x:TypeArguments="x:String" Name="var_SapSecdep" />
+      <Variable x:TypeArguments="x:String" Name="var_SapPeriod" />
+      <Variable x:TypeArguments="x:String" Name="var_OcrSecurityDeposit" />
+      <Variable x:TypeArguments="x:String" Name="var_DbPayerID" />
+      <Variable x:TypeArguments="scg:List(x:String)" Default="[New List(Of String)]" Name="var_CalcAgreementItemList" />
+      <Variable x:TypeArguments="x:Int32" Name="var_DbSecdepTotal" />
+      <Variable x:TypeArguments="x:Int32" Name="var_DbBiayaMobilisasiTotal" />
+      <Variable x:TypeArguments="x:String" Name="var_DbDocSecdep" />
+      <Variable x:TypeArguments="x:String" Name="var_DbDocMobilisasi" />
+      <Variable x:TypeArguments="x:String" Name="var_DbDocDp" />
+      <Variable x:TypeArguments="x:String" Name="var_DbRequestDate" />
+      <Variable x:TypeArguments="sd:DataTable" Name="var_DTOCRDetail" />
+      <Variable x:TypeArguments="x:String" Name="var_SapOverdueBranch" />
+      <Variable x:TypeArguments="x:String" Name="var_SapReqChangeToWorkable" />
+      <Variable x:TypeArguments="x:String" Name="var_SapGetPDG" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <Flowchart sap:VirtualizedContainerService.HintSize="644.8,1016.8" sap2010:WorkflowViewState.IdRef="Flowchart_1">
+      <Flowchart.Variables>
+        <Variable x:TypeArguments="x:String" Name="var_CalcAgreementValue" />
+        <Variable x:TypeArguments="x:String" Name="var_CalcAgreementValueVAT" />
+        <Variable x:TypeArguments="sd:DataTable" Name="var_DTOrderTrack" />
+        <Variable x:TypeArguments="x:String" Name="var_CalcRateMonthVAT" />
+        <Variable x:TypeArguments="x:String" Name="var_CalcPrincipalVAT" />
+        <Variable x:TypeArguments="x:String" Name="var_CalcRateMonth" />
+        <Variable x:TypeArguments="x:String" Name="var_SapTopDescription" />
+        <Variable x:TypeArguments="scg:List(x:String)" Default="[New List(Of String)]" Name="var_CalcPrincipalLessWhtItemList" />
+        <Variable x:TypeArguments="scg:List(x:String)" Default="[New List(Of String)]" Name="var_CalcRentMonthVATItemList" />
+        <Variable x:TypeArguments="x:String" Name="var_ICMPartyName" />
+        <Variable x:TypeArguments="x:String" Name="var_AgingOverdue" />
+        <Variable x:TypeArguments="sd:DataTable" Name="var_DTSODetail" />
+        <Variable x:TypeArguments="x:String" Name="var_SecDepPrincipal" />
+        <Variable x:TypeArguments="x:String" Name="var_SecDepTotal" />
+        <Variable x:TypeArguments="x:String" Name="var_DpPrincipal" />
+        <Variable x:TypeArguments="x:String" Name="var_DpTotal" />
+      </Flowchart.Variables>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <av:Point x:Key="ShapeLocation">260,12.5</av:Point>
+          <av:Size x:Key="ShapeSize">60,75.2</av:Size>
+          <av:PointCollection x:Key="ConnectorLocation">290,87.5 290,116</av:PointCollection>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          <x:Double x:Key="Height">980</x:Double>
+          <x:Double x:Key="Width">630</x:Double>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <Flowchart.StartNode>
+        <x:Reference>__ReferenceID9</x:Reference>
+      </Flowchart.StartNode>
+      <FlowStep x:Name="__ReferenceID9">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">190,116</av:Point>
+            <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">290,168.8 290,204</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <Sequence DisplayName="Get Data From DB" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="Sequence_11">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="x:String" Default="Get Data from DB" Name="var_Section" />
+            <Variable x:TypeArguments="x:String" Name="var_OcrTransactionDetails" />
+          </Sequence.Variables>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log" sap:VirtualizedContainerService.HintSize="654.4,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_58" UnSafe="False" WorkflowFileName="General\General - Log.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="Section">[var_Section]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Message">["Request ID = " &amp; var_RequestID]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:InvokeWorkflowFile>
+          <Sequence DisplayName="Collect Info 1" sap:VirtualizedContainerService.HintSize="654.4,1740" sap2010:WorkflowViewState.IdRef="Sequence_34">
+            <Sequence.Variables>
+              <Variable x:TypeArguments="sd:DataTable" Name="var_DTRequest" />
+              <Variable x:TypeArguments="sd:DataTable" Name="var_DTRequestCase" />
+            </Sequence.Variables>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:ExecuteQuery ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" CommandType="Text" DataTable="[var_DTRequest]" DisplayName="Execute Query - Table RA Request" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="477.6,89.6" sap2010:WorkflowViewState.IdRef="ExecuteQuery_2" Sql="[&quot;SELECT RefSO FROM rpa.RARequest WHERE Id = &quot; &amp; var_RequestID]">
+              <ui:ExecuteQuery.Parameters>
+                <scg:Dictionary x:TypeArguments="x:String, Argument" />
+              </ui:ExecuteQuery.Parameters>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:ExecuteQuery>
+            <ui:ExecuteQuery ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" CommandType="Text" DataTable="[var_DTRequestCase]" DisplayName="Execute Query - SP Get Request Case" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="477.6,89.6" sap2010:WorkflowViewState.IdRef="ExecuteQuery_3" Sql="[&quot;EXEC [rpa].[SpRpaGetRequestCase] @Id = &quot; &amp; var_RequestID]">
+              <ui:ExecuteQuery.Parameters>
+                <scg:Dictionary x:TypeArguments="x:String, Argument" />
+              </ui:ExecuteQuery.Parameters>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:ExecuteQuery>
+            <ui:MultipleAssign DisplayName="Multiple Assign" sap:VirtualizedContainerService.HintSize="477.6,161.6" sap2010:WorkflowViewState.IdRef="MultipleAssign_1">
+              <ui:MultipleAssign.AssignOperations>
+                <scg:List x:TypeArguments="ui:AssignOperation" Capacity="4">
+                  <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_1">
+                    <ui:AssignOperation.To>
+                      <OutArgument x:TypeArguments="x:String">[var_DbRACode]</OutArgument>
+                    </ui:AssignOperation.To>
+                    <ui:AssignOperation.Value>
+                      <InArgument x:TypeArguments="x:String">[String.Join("|", var_DTRequestCase.AsEnumerable().Select(Function(row) row("CaseCode").ToString()).ToArray())]</InArgument>
+                    </ui:AssignOperation.Value>
+                  </ui:AssignOperation>
+                  <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_5">
+                    <ui:AssignOperation.To>
+                      <OutArgument x:TypeArguments="x:String">[var_DbRAType]</OutArgument>
+                    </ui:AssignOperation.To>
+                    <ui:AssignOperation.Value>
+                      <InArgument x:TypeArguments="x:String">[var_DTRequestCase.Rows(0)("CaseName").ToString()]</InArgument>
+                    </ui:AssignOperation.Value>
+                  </ui:AssignOperation>
+                  <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_6">
+                    <ui:AssignOperation.To>
+                      <OutArgument x:TypeArguments="s:String[]">[var_WRNumbers]</OutArgument>
+                    </ui:AssignOperation.To>
+                    <ui:AssignOperation.Value>
+                      <InArgument x:TypeArguments="s:String[]">[var_DTRequest.Rows(0)("RefSO").ToString().Split(",".ToCharArray(), StringSplitOptions.None).Distinct().ToArray()]</InArgument>
+                    </ui:AssignOperation.Value>
+                  </ui:AssignOperation>
+                </scg:List>
+              </ui:MultipleAssign.AssignOperations>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:MultipleAssign>
+            <Switch x:TypeArguments="x:Boolean" DisplayName="Switch" Expression="[var_DbRAType.ToUpper().Contains(&quot;NON RPO&quot;)]" sap:VirtualizedContainerService.HintSize="477.6,164" sap2010:WorkflowViewState.IdRef="Switch`1_4">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <Assign x:Key="True" sap:VirtualizedContainerService.HintSize="243.2,60" sap2010:WorkflowViewState.IdRef="Assign_9">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[var_DbRAType]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">RO</InArgument>
+                </Assign.Value>
+              </Assign>
+              <Assign x:Key="False" sap:VirtualizedContainerService.HintSize="243.2,60" sap2010:WorkflowViewState.IdRef="Assign_10">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[var_DbRAType]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">RPO</InArgument>
+                </Assign.Value>
+              </Assign>
+            </Switch>
+            <ui:ExecuteQuery ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" CommandType="Text" DataTable="[var_DTSODetail]" DisplayName="Execute Query - SP Get SO Detail" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="477.6,89.6" sap2010:WorkflowViewState.IdRef="ExecuteQuery_5" Sql="[&quot;EXEC [rpa].[SpRpaGetSODetail] @Id = &quot; &amp; var_RequestID]">
+              <ui:ExecuteQuery.Parameters>
+                <scg:Dictionary x:TypeArguments="x:String, Argument" />
+              </ui:ExecuteQuery.Parameters>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:ExecuteQuery>
+            <ui:ExecuteQuery ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" CommandType="Text" DataTable="[var_DTOCRDetail]" DisplayName="Execute Query - SP Get OCR Detail" ExistingDbConnection="[in_DBConnection]" sap:VirtualizedContainerService.HintSize="477.6,89.6" sap2010:WorkflowViewState.IdRef="ExecuteQuery_4" Sql="[&quot;EXEC [rpa].[SpRpaGetOCRDetail] @Id = &quot; &amp; var_RequestID]">
+              <ui:ExecuteQuery.Parameters>
+                <scg:Dictionary x:TypeArguments="x:String, Argument" />
+              </ui:ExecuteQuery.Parameters>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:ExecuteQuery>
+            <If Condition="[var_DTOCRDetail.Rows.Count &gt; 0]" DisplayName="Check if OCR Detail Table Count &gt; 0" sap:VirtualizedContainerService.HintSize="477.6,342.4" sap2010:WorkflowViewState.IdRef="If_9">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <If.Then>
+                <ui:MultipleAssign DisplayName="Multiple Assign" sap:VirtualizedContainerService.HintSize="318.4,192.8" sap2010:WorkflowViewState.IdRef="MultipleAssign_2">
+                  <ui:MultipleAssign.AssignOperations>
+                    <scg:List x:TypeArguments="ui:AssignOperation" Capacity="4">
+                      <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_3">
+                        <ui:AssignOperation.To>
+                          <OutArgument x:TypeArguments="x:String">[var_DbContractNumber]</OutArgument>
+                        </ui:AssignOperation.To>
+                        <ui:AssignOperation.Value>
+                          <InArgument x:TypeArguments="x:String">[var_DTOCRDetail.Rows(0)("ContractNo").ToString()]</InArgument>
+                        </ui:AssignOperation.Value>
+                      </ui:AssignOperation>
+                      <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_4">
+                        <ui:AssignOperation.To>
+                          <OutArgument x:TypeArguments="x:String">[var_DbRAType]</OutArgument>
+                        </ui:AssignOperation.To>
+                        <ui:AssignOperation.Value>
+                          <InArgument x:TypeArguments="x:String">[var_DTOCRDetail.Rows(0).Item("RATypeName").ToString().Replace("Workable","").Trim()]</InArgument>
+                        </ui:AssignOperation.Value>
+                      </ui:AssignOperation>
+                      <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_7">
+                        <ui:AssignOperation.To>
+                          <OutArgument x:TypeArguments="x:String">[var_DbPayerID]</OutArgument>
+                        </ui:AssignOperation.To>
+                        <ui:AssignOperation.Value>
+                          <InArgument x:TypeArguments="x:String">[var_DTOCRDetail.Rows(0).Item("PayerId").ToString().Trim()]</InArgument>
+                        </ui:AssignOperation.Value>
+                      </ui:AssignOperation>
+                      <ui:AssignOperation sap2010:WorkflowViewState.IdRef="AssignOperation_8">
+                        <ui:AssignOperation.To>
+                          <OutArgument x:TypeArguments="x:String">[var_DbRequestDate]</OutArgument>
+                        </ui:AssignOperation.To>
+                        <ui:AssignOperation.Value>
+                          <InArgument x:TypeArguments="x:String">[var_DTOCRDetail.Rows(0).Item("RequestDate").ToString().Trim()]</InArgument>
+                        </ui:AssignOperation.Value>
+                      </ui:AssignOperation>
+                    </scg:List>
+                  </ui:MultipleAssign.AssignOperations>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:MultipleAssign>
+              </If.Then>
+            </If>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log" sap:VirtualizedContainerService.HintSize="477.6,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_60" UnSafe="False" WorkflowFileName="General\General - Log.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:String" x:Key="Section">[var_Section]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="Message">["DB Contract Number = " &amp; var_DbContractNumber]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:InvokeWorkflowFile>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log" sap:VirtualizedContainerService.HintSize="477.6,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_61" UnSafe="False" WorkflowFileName="General\General - Log.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:String" x:Key="Section">[var_Section]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="Message">["DB RA Type = " &amp; var_DbRAType]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:InvokeWorkflowFile>
+            <If Condition="[Not String.IsNullOrWhiteSpace(var_DbContractNumber)]" DisplayName="Check If No Contract is Not Empty" sap:VirtualizedContainerService.HintSize="477.6,52.8" sap2010:WorkflowViewState.IdRef="If_10">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <If.Then>
+                <Sequence DisplayName="Go to ICM" sap:VirtualizedContainerService.HintSize="336.8,398.4" sap2010:WorkflowViewState.IdRef="Sequence_33">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="ICM Login" sap:VirtualizedContainerService.HintSize="314.4,52.8" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_62" UnSafe="False" WorkflowFileName="Trakindo ICM\ICM - Login.xaml">
+                    <ui:InvokeWorkflowFile.Arguments>
+                      <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[in_Config]</InArgument>
+                    </ui:InvokeWorkflowFile.Arguments>
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                  </ui:InvokeWorkflowFile>
+                  <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="ICM Get Status" sap:VirtualizedContainerService.HintSize="314.4,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_63" UnSafe="False" WorkflowFileName="Trakindo ICM\ICM - Get Status.xaml">
+                    <ui:InvokeWorkflowFile.Arguments>
+                      <InArgument x:TypeArguments="x:String" x:Key="in_ContractNumber">[var_DbContractNumber]</InArgument>
+                      <OutArgument x:TypeArguments="x:String" x:Key="out_ICMPartyName">[var_ICMPartyName]</OutArgument>
+                      <OutArgument x:TypeArguments="x:String" x:Key="out_ICMStatus">[var_ICMStatus]</OutArgument>
+                    </ui:InvokeWorkflowFile.Arguments>
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                  </ui:InvokeWorkflowFile>
+                  <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="ICM Logout" sap:VirtualizedContainerService.HintSize="314.4,52.8" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_64" UnSafe="False" WorkflowFileName="Trakindo ICM\ICM - Logout.xaml">
+                    <ui:InvokeWorkflowFile.Arguments>
+                      <scg:Dictionary x:TypeArguments="x:String, Argument" />
+                    </ui:InvokeWorkflowFile.Arguments>
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                  </ui:InvokeWorkflowFile>
+                </Sequence>
+              </If.Then>
+              <If.Else>
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log" sap:VirtualizedContainerService.HintSize="314.4,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_65" UnSafe="False" WorkflowFileName="General\General - Log.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <InArgument x:TypeArguments="x:String" x:Key="Section">[var_Section]</InArgument>
+                    <InArgument x:TypeArguments="x:String" x:Key="Message">DB Contract Number does not exists.</InArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:InvokeWorkflowFile>
+              </If.Else>
+            </If>
+          </Sequence>
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke General - Log workflow" sap:VirtualizedContainerService.HintSize="654.4,52.8" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_93" UnSafe="False" WorkflowFileName="General\General - Log.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="Section">[var_Section]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Message">["ICM Party Name = " &amp; var_ICMPartyName]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:InvokeWorkflowFile>
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke General - Log workflow" sap:VirtualizedContainerService.HintSize="654.4,52.8" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_94" UnSafe="False" WorkflowFileName="General\General - Log.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="Section">[var_Section]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Message">["ICM Status = " &amp; var_ICMStatus]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:InvokeWorkflowFile>
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log" sap:VirtualizedContainerService.HintSize="654.4,52.8" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_59" UnSafe="False" WorkflowFileName="General\General - Log.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="Section">[var_Section]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Message">["DB RA Case Code = " &amp; var_DbRACode]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:InvokeWorkflowFile>
+          <If Condition="[var_DbRACode.Contains(&quot;RAC00000062&quot;)]" DisplayName="Check If RA Case is Based on PO / ERA" sap:VirtualizedContainerService.HintSize="654.4,237.6" sap2010:WorkflowViewState.IdRef="If_3">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <If.Then>
+              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Get PO Information" sap:VirtualizedContainerService.HintSize="314.4,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_66" UnSafe="False" WorkflowFileName="Database\Database - Get PO Information.xaml">
+                <ui:InvokeWorkflowFile.Arguments>
+                  <InArgument x:TypeArguments="ui:DatabaseConnection" x:Key="in_DBConnection">[in_DBConnection]</InArgument>
+                  <InArgument x:TypeArguments="x:String" x:Key="in_RequestID">[var_RequestID]</InArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrNilaiPerjanjian">[var_OcrNilaiPerjanjian]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrPONumber">[var_OcrPONumber]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrRate">[var_OcrRateMonth]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrTop">[var_OcrTop]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_DbBiayaMobilisasi">[var_DbBiayaMobilisasi]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_DbDownPayment">[var_DbDownPayment]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrSecdep">[var_DbSecdep]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrPeriod">[var_OcrPeriod]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrCreditRating">[var_OcrCreditRating]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrTransactionAmount">[var_OcrTransactionAmount]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrTransactionDetails">[var_OcrTransactionDetails]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrResultTime">[var_OcrResultTime]</OutArgument>
+                  <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[in_Config]</InArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrSerialNumber">[var_OcrSerialNumber]</OutArgument>
+                  <OutArgument x:TypeArguments="x:Int32" x:Key="out_DbSecdepTotal">[var_DbSecdepTotal]</OutArgument>
+                  <OutArgument x:TypeArguments="x:Int32" x:Key="out_DbBiayaMobilisasiTotal">[var_DbBiayaMobilisasiTotal]</OutArgument>
+                </ui:InvokeWorkflowFile.Arguments>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:InvokeWorkflowFile>
+            </If.Then>
+            <If.Else>
+              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Get ERA Information" sap:VirtualizedContainerService.HintSize="315.2,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_88" UnSafe="False" WorkflowFileName="Database\Database - Get ERA Information.xaml">
+                <ui:InvokeWorkflowFile.Arguments>
+                  <InArgument x:TypeArguments="ui:DatabaseConnection" x:Key="in_DBConnection">[in_DBConnection]</InArgument>
+                  <InArgument x:TypeArguments="x:String" x:Key="in_RequestID">[var_RequestID]</InArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrNilaiPerjanjian">[var_OcrNilaiPerjanjian]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrUEPrice">[var_OcrUEPrice]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrAccountNumber">[var_OcrAccountNumber]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrPeriod">[var_OcrPeriod]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrRateMonth">[var_OcrRateMonth]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrRateHour">[var_OcrRateHour]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrMinHourPerMonth">[var_OcrMinHour]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrTop">[var_OcrTop]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrBeneficiaryBank">[var_OcrBeneficiaryBank]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrSerialNumber">[var_OcrSerialNumber]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrCreditRating">[var_OcrCreditRating]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrTransactionAmount">[var_OcrTransactionAmount]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrResultTime">[var_OcrResultTime]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_DbSecdep">[var_DbSecdep]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_DbBiayaMobilisasi">[var_DbBiayaMobilisasi]</OutArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_DbDownPayment">[var_DbDownPayment]</OutArgument>
+                  <InArgument x:TypeArguments="x:String" x:Key="in_DbRACode">[var_DbRACode]</InArgument>
+                  <OutArgument x:TypeArguments="x:String" x:Key="out_OcrSecurityDeposit">[var_OcrSecurityDeposit]</OutArgument>
+                  <OutArgument x:TypeArguments="x:Int32" x:Key="out_DbSecdepTotal">[var_DbSecdepTotal]</OutArgument>
+                  <OutArgument x:TypeArguments="x:Int32" x:Key="out_DbBiayaMobilisasiTotal">[var_DbBiayaMobilisasiTotal]</OutArgument>
+                </ui:InvokeWorkflowFile.Arguments>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:InvokeWorkflowFile>
+            </If.Else>
+          </If>
+        </Sequence>
+        <FlowStep.Next>
+          <FlowStep x:Name="__ReferenceID1">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <av:Point x:Key="ShapeLocation">190,204</av:Point>
+                <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+                <av:PointCollection x:Key="ConnectorLocation">290,256.8 290,284</av:PointCollection>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="General - Create Directory" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_57" UnSafe="False" WorkflowFileName="General\General - Create Directory.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:String" x:Key="in_WRNumber">[String.Join(",", var_WRNumbers)]</InArgument>
+                <OutArgument x:TypeArguments="x:String" x:Key="out_WRDirectory">[var_WRDirectory]</OutArgument>
+                <InOutArgument x:TypeArguments="x:String" x:Key="io_WRType">[var_DbRAType]</InOutArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:InvokeWorkflowFile>
+            <FlowStep.Next>
+              <FlowStep x:Name="__ReferenceID2">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <av:Point x:Key="ShapeLocation">190,284</av:Point>
+                    <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+                    <av:PointCollection x:Key="ConnectorLocation">290,336.8 290,364.5</av:PointCollection>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Database - Get Document Number List workflow" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_77" UnSafe="False" WorkflowFileName="Database\Database - Get Document Number List.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <InOutArgument x:TypeArguments="scg:List(x:String)" x:Key="io_DocumentNumberList">[var_DbDocumentNumberList]</InOutArgument>
+                    <InArgument x:TypeArguments="x:String" x:Key="in_RequestID">[var_RequestID]</InArgument>
+                    <InArgument x:TypeArguments="ui:DatabaseConnection" x:Key="in_DBConnection">[in_DBConnection]</InArgument>
+                    <OutArgument x:TypeArguments="x:String" x:Key="out_DocSecdep">[var_DbDocSecdep]</OutArgument>
+                    <OutArgument x:TypeArguments="x:String" x:Key="out_DocMobilisasi">[var_DbDocMobilisasi]</OutArgument>
+                    <OutArgument x:TypeArguments="x:String" x:Key="out_DocDp">[var_DbDocDp]</OutArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:InvokeWorkflowFile>
+                <FlowStep.Next>
+                  <FlowStep x:Name="__ReferenceID7">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <av:Point x:Key="ShapeLocation">190,364.5</av:Point>
+                        <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+                        <av:PointCollection x:Key="ConnectorLocation">290,417.3 290,447</av:PointCollection>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log Account No" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_91" UnSafe="False" WorkflowFileName="General\General - Log.xaml">
+                      <ui:InvokeWorkflowFile.Arguments>
+                        <InArgument x:TypeArguments="x:String" x:Key="Section">Flowchart</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="Message" xml:space="preserve">["var_OcrAccountNumber = " &amp; var_OcrAccountNumber &amp; Environment.NewLine &amp; _
+"var_OcrPeriod = " &amp; var_OcrPeriod &amp; Environment.NewLine &amp; _
+"var_OcrRateMonth = " &amp; var_OcrRateMonth &amp; Environment.NewLine &amp; _
+"var_OcrNilaiPerjanjian = " &amp; var_OcrNilaiPerjanjian &amp; Environment.NewLine &amp; _
+"var_OcrSerialNumber = " &amp; var_OcrSerialNumber &amp; Environment.NewLine &amp; _
+"var_OcrUEPrice = " &amp; var_OcrUEPrice &amp; Environment.NewLine &amp; _
+"var_OcrRateHour = " &amp; var_OcrRateHour &amp; Environment.NewLine &amp; _
+"var_OcrMinHourPerMonth = " &amp; var_OcrMinHour &amp; Environment.NewLine &amp; _
+"var_OcrTop = " &amp; var_OcrTop &amp; Environment.NewLine &amp; _
+"var_OcrBeneficiaryBank = " &amp; var_OcrBeneficiaryBank &amp; Environment.NewLine &amp; _
+"var_OcrTransactionAmount = " &amp; var_OcrTransactionAmount &amp; Environment.NewLine &amp; _
+"var_OcrResultTime = " &amp; var_OcrResultTime &amp; Environment.NewLine &amp; _
+"var_OcrCreditRating = " &amp; var_OcrCreditRating &amp; Environment.NewLine &amp; _
+"var_OcrSecurityDeposit = " &amp; var_OcrSecurityDeposit]</InArgument>
+                      </ui:InvokeWorkflowFile.Arguments>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </ui:InvokeWorkflowFile>
+                    <FlowStep.Next>
+                      <FlowStep x:Name="__ReferenceID0">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <av:Point x:Key="ShapeLocation">190,447</av:Point>
+                            <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+                            <av:PointCollection x:Key="ConnectorLocation">290,499.8 290,544.5</av:PointCollection>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <Sequence DisplayName="Get Data SAP" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="Sequence_28">
+                          <Sequence.Variables>
+                            <Variable x:TypeArguments="x:String" Default="Get SAP Multiple Data" Name="var_Section" />
+                          </Sequence.Variables>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log" sap:VirtualizedContainerService.HintSize="336.8,52.8" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_76" UnSafe="False" WorkflowFileName="General\General - Log.xaml">
+                            <ui:InvokeWorkflowFile.Arguments>
+                              <InArgument x:TypeArguments="x:String" x:Key="Section">[var_Section]</InArgument>
+                              <InArgument x:TypeArguments="x:String" x:Key="Message">Get SAP Multiple Data started.</InArgument>
+                            </ui:InvokeWorkflowFile.Arguments>
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                          </ui:InvokeWorkflowFile>
+                          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Sap Get Order Track Information" sap:VirtualizedContainerService.HintSize="336.8,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_44" UnSafe="False" WorkflowFileName="SAP\Sap - Get Order Track Information.xaml">
+                            <ui:InvokeWorkflowFile.Arguments>
+                              <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[in_Config]</InArgument>
+                              <OutArgument x:TypeArguments="x:String" x:Key="out_SapPaymentPlan">[var_SapPaymentPlan]</OutArgument>
+                              <OutArgument x:TypeArguments="x:String" x:Key="out_SapCurrency">[var_SapCurrency]</OutArgument>
+                              <InArgument x:TypeArguments="s:String[]" x:Key="in_WRNumbers">[var_WRNumbers]</InArgument>
+                            </ui:InvokeWorkflowFile.Arguments>
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                          </ui:InvokeWorkflowFile>
+                          <Sequence DisplayName="Sap Collect" sap:VirtualizedContainerService.HintSize="336.8,596.8" sap2010:WorkflowViewState.IdRef="Sequence_41">
+                            <Sequence.Variables>
+                              <Variable x:TypeArguments="x:String" Name="var_SapTermsOfPayment" />
+                              <Variable x:TypeArguments="scg:List(x:Decimal)" Name="var_SapSecdepList" />
+                            </Sequence.Variables>
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Sap Report Order Track" sap:VirtualizedContainerService.HintSize="314.4,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_79" UnSafe="False" WorkflowFileName="SAP\Sap - Report Order Track.xaml">
+                              <ui:InvokeWorkflowFile.Arguments>
+                                <OutArgument x:TypeArguments="x:String" x:Key="out_SapNetValue">[var_SapNetValue]</OutArgument>
+                                <OutArgument x:TypeArguments="x:String" x:Key="out_SapModel">[var_SapModel]</OutArgument>
+                                <OutArgument x:TypeArguments="x:String" x:Key="out_SapPayerID">[var_SapPayerID]</OutArgument>
+                                <OutArgument x:TypeArguments="x:String" x:Key="out_SapPayerName">[var_SapPayerName]</OutArgument>
+                                <OutArgument x:TypeArguments="x:String" x:Key="out_SapWorkableAFM">[var_SapWorkableAFM]</OutArgument>
+                                <OutArgument x:TypeArguments="x:String" x:Key="out_SapWaiverStatus">[var_SapWaiverStatus]</OutArgument>
+                                <OutArgument x:TypeArguments="x:String" x:Key="out_SapBusinessArea">[var_SapBusinessArea]</OutArgument>
+                                <OutArgument x:TypeArguments="x:String" x:Key="out_SapOverdueGroup">[var_SapPaymentPlan]</OutArgument>
+                                <OutArgument x:TypeArguments="x:String" x:Key="out_SapSerialNumber">[var_SapSerialNumber]</OutArgument>
+                                <OutArgument x:TypeArguments="x:String" x:Key="out_SapCurrency">[var_SapCurrency]</OutArgument>
+                                <InArgument x:TypeArguments="x:String" x:Key="in_WRDirectory">[var_WRDirectory]</InArgument>
+                                <InArgument x:TypeArguments="s:String[]" x:Key="in_WRNumbers">[var_WRNumbers]</InArgument>
+                                <OutArgument x:TypeArguments="x:String" x:Key="out_SapTopDescription">[var_SapTopDescription]</OutArgument>
+                                <OutArgument x:TypeArguments="x:String" x:Key="out_SapTermsOfPayment">[var_SapTermsOfPayment]</OutArgument>
+                                <OutArgument x:TypeArguments="x:String" x:Key="out_SapOverdueBranch">[var_SapOverdueBranch]</OutArgument>
+                                <OutArgument x:TypeArguments="x:String" x:Key="out_SapReqChangeToWorkable">[var_SapReqChangeToWorkable]</OutArgument>
+                                <InArgument x:TypeArguments="x:String" x:Key="in_DbRACode">[var_DbRACode]</InArgument>
+                                <OutArgument x:TypeArguments="x:String" x:Key="out_SapGetPDG">[var_SapGetPDG]</OutArgument>
+                              </ui:InvokeWorkflowFile.Arguments>
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                            </ui:InvokeWorkflowFile>
+                            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Sap Report Aging Group" sap:VirtualizedContainerService.HintSize="314.4,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_80" UnSafe="False" WorkflowFileName="SAP\Sap - Report Aging Group.xaml">
+                              <ui:InvokeWorkflowFile.Arguments>
+                                <InArgument x:TypeArguments="x:String" x:Key="in_SapPayerID">[var_SapPayerID]</InArgument>
+                                <InArgument x:TypeArguments="x:String" x:Key="in_WRDirectory">[var_WRDirectory]</InArgument>
+                                <InArgument x:TypeArguments="s:String[]" x:Key="in_WRNumbers">[var_WRNumbers]</InArgument>
+                              </ui:InvokeWorkflowFile.Arguments>
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                            </ui:InvokeWorkflowFile>
+                            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Sap Report FBL5N" sap:VirtualizedContainerService.HintSize="314.4,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_81" UnSafe="False" WorkflowFileName="SAP\Sap - Report FBL5N.xaml">
+                              <ui:InvokeWorkflowFile.Arguments>
+                                <InArgument x:TypeArguments="x:String" x:Key="in_WRDirectory">[var_WRDirectory]</InArgument>
+                                <InArgument x:TypeArguments="x:String" x:Key="in_SapPayerID">[var_SapPayerID]</InArgument>
+                                <InArgument x:TypeArguments="scg:List(x:String)" x:Key="in_DocumentNumberList">[var_DbDocumentNumberList]</InArgument>
+                                <InArgument x:TypeArguments="s:String[]" x:Key="in_WRNumbers">[var_WRNumbers]</InArgument>
+                                <OutArgument x:TypeArguments="scg:List(x:Decimal)" x:Key="out_SapSecdepList">[var_SapSecdepList]</OutArgument>
+                              </ui:InvokeWorkflowFile.Arguments>
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                            </ui:InvokeWorkflowFile>
+                            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Sap Get Rental Period" sap:VirtualizedContainerService.HintSize="314.4,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_82" UnSafe="False" WorkflowFileName="SAP\Sap - Get Rental Period.xaml">
+                              <ui:InvokeWorkflowFile.Arguments>
+                                <OutArgument x:TypeArguments="x:String" x:Key="out_SapPeriod">[var_SapPeriod]</OutArgument>
+                                <InArgument x:TypeArguments="s:String[]" x:Key="in_WRNumbers">[var_WRNumbers]</InArgument>
+                              </ui:InvokeWorkflowFile.Arguments>
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                            </ui:InvokeWorkflowFile>
+                          </Sequence>
+                          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log" sap:VirtualizedContainerService.HintSize="336.8,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_83" UnSafe="False" WorkflowFileName="General\General - Log.xaml">
+                            <ui:InvokeWorkflowFile.Arguments>
+                              <InArgument x:TypeArguments="x:String" x:Key="Section">[var_Section]</InArgument>
+                              <InArgument x:TypeArguments="x:String" x:Key="Message">Get SAP Multiple Data ended.</InArgument>
+                            </ui:InvokeWorkflowFile.Arguments>
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                          </ui:InvokeWorkflowFile>
+                        </Sequence>
+                        <FlowStep.Next>
+                          <FlowStep x:Name="__ReferenceID3">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <av:Point x:Key="ShapeLocation">190,544.5</av:Point>
+                                <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+                                <av:PointCollection x:Key="ConnectorLocation">290,597.3 290,634.5</av:PointCollection>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="WR Calculation L1" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_84" UnSafe="False" WorkflowFileName="Excel\Excel - WR Calculation L1.xaml">
+                              <ui:InvokeWorkflowFile.Arguments>
+                                <InArgument x:TypeArguments="x:String" x:Key="in_SapPayerID">[var_SapPayerID]</InArgument>
+                                <InArgument x:TypeArguments="x:String" x:Key="in_WRDirectory">[var_WRDirectory]</InArgument>
+                                <InArgument x:TypeArguments="s:String[]" x:Key="in_WRNumbers">[var_WRNumbers]</InArgument>
+                                <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[in_Config]</InArgument>
+                                <OutArgument x:TypeArguments="x:String" x:Key="out_AgingOverdue">[var_AgingOverdue]</OutArgument>
+                              </ui:InvokeWorkflowFile.Arguments>
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                            </ui:InvokeWorkflowFile>
+                            <FlowStep.Next>
+                              <FlowStep x:Name="__ReferenceID4">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <av:Point x:Key="ShapeLocation">190,634.5</av:Point>
+                                    <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+                                    <av:PointCollection x:Key="ConnectorLocation">290,687.3 290,724.5</av:PointCollection>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="WR Calculation L2" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_86" UnSafe="False" WorkflowFileName="Excel\Excel - WR Calculation L2.xaml">
+                                  <ui:InvokeWorkflowFile.Arguments>
+                                    <InArgument x:TypeArguments="s:String[]" x:Key="in_WRNumbers">[var_WRNumbers]</InArgument>
+                                    <InArgument x:TypeArguments="x:String" x:Key="in_WRDirectory">[var_WRDirectory]</InArgument>
+                                    <InArgument x:TypeArguments="x:String" x:Key="in_RAType">[var_DbRAType]</InArgument>
+                                    <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[in_Config]</InArgument>
+                                  </ui:InvokeWorkflowFile.Arguments>
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                </ui:InvokeWorkflowFile>
+                                <FlowStep.Next>
+                                  <FlowStep x:Name="__ReferenceID6">
+                                    <sap:WorkflowViewStateService.ViewState>
+                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                        <av:Point x:Key="ShapeLocation">190,724.5</av:Point>
+                                        <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+                                        <av:PointCollection x:Key="ConnectorLocation">290,777.3 290,814.5</av:PointCollection>
+                                      </scg:Dictionary>
+                                    </sap:WorkflowViewStateService.ViewState>
+                                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log Account No" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_90" UnSafe="False" WorkflowFileName="General\General - Log.xaml">
+                                      <ui:InvokeWorkflowFile.Arguments>
+                                        <InArgument x:TypeArguments="x:String" x:Key="Section">Flowchart</InArgument>
+                                        <InArgument x:TypeArguments="x:String" x:Key="Message" xml:space="preserve">["var_OcrAccountNumber = " &amp; var_OcrAccountNumber &amp; Environment.NewLine &amp; _
+"var_OcrPeriod = " &amp; var_OcrPeriod &amp; Environment.NewLine &amp; _
+"var_OcrRateMonth = " &amp; var_OcrRateMonth &amp; Environment.NewLine &amp; _
+"var_OcrNilaiPerjanjian = " &amp; var_OcrNilaiPerjanjian &amp; Environment.NewLine &amp; _
+"var_OcrSerialNumber = " &amp; var_OcrSerialNumber &amp; Environment.NewLine &amp; _
+"var_OcrUEPrice = " &amp; var_OcrUEPrice &amp; Environment.NewLine &amp; _
+"var_OcrRateHour = " &amp; var_OcrRateHour &amp; Environment.NewLine &amp; _
+"var_OcrMinHourPerMonth = " &amp; var_OcrMinHour &amp; Environment.NewLine &amp; _
+"var_OcrTop = " &amp; var_OcrTop &amp; Environment.NewLine &amp; _
+"var_OcrBeneficiaryBank = " &amp; var_OcrBeneficiaryBank &amp; Environment.NewLine &amp; _
+"var_OcrTransactionAmount = " &amp; var_OcrTransactionAmount &amp; Environment.NewLine &amp; _
+"var_OcrResultTime = " &amp; var_OcrResultTime &amp; Environment.NewLine &amp; _
+"var_OcrCreditRating = " &amp; var_OcrCreditRating &amp; Environment.NewLine &amp; _
+"var_OcrSecurityDeposit = " &amp; var_OcrSecurityDeposit]</InArgument>
+                                      </ui:InvokeWorkflowFile.Arguments>
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                    </ui:InvokeWorkflowFile>
+                                    <FlowStep.Next>
+                                      <FlowStep x:Name="__ReferenceID8">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <av:Point x:Key="ShapeLocation">190,814.5</av:Point>
+                                            <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+                                            <av:PointCollection x:Key="ConnectorLocation">290,867.3 290,894.5</av:PointCollection>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="WR Calculation L3" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_92" UnSafe="False" WorkflowFileName="Excel\Excel - WR Calculation L3.xaml">
+                                          <ui:InvokeWorkflowFile.Arguments>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_WRDirectory">[var_WRDirectory]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_OcrRateHour">[var_OcrRateHour]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_OcrPeriod">[var_OcrPeriod]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_OcrUEPrice">[var_OcrUEPrice]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_OcrRateMonth">[var_OcrRateMonth]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_OcrTransactionAmount">[var_OcrTransactionAmount]</InArgument>
+                                            <OutArgument x:TypeArguments="x:String" x:Key="out_CalcAgreementValue">[var_CalcAgreementValue]</OutArgument>
+                                            <OutArgument x:TypeArguments="x:String" x:Key="out_CalcAgreementValueVAT">[var_CalcAgreementValueVAT]</OutArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_DbRAType">[var_DbRAType]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_DbBiayaMobilisasi">[var_DbBiayaMobilisasi]</InArgument>
+                                            <OutArgument x:TypeArguments="x:String" x:Key="out_CalcRateMonth">[var_CalcRateMonth]</OutArgument>
+                                            <OutArgument x:TypeArguments="x:String" x:Key="out_CalcPrincipalVAT">[var_CalcPrincipalVAT]</OutArgument>
+                                            <OutArgument x:TypeArguments="x:String" x:Key="out_CalcRateMonthVAT">[var_CalcRateMonthVAT]</OutArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_OcrSerialNumber">[var_OcrSerialNumber]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_RequestID">[var_RequestID]</InArgument>
+                                            <InArgument x:TypeArguments="ui:DatabaseConnection" x:Key="in_DBConnection">[in_DBConnection]</InArgument>
+                                            <OutArgument x:TypeArguments="sd:DataTable" x:Key="out_DTOrderTrack">[var_DTOrderTrack]</OutArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_OcrNilaiPerjanjian">[var_OcrNilaiPerjanjian]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_DbDownPayment">[var_DbDownPayment]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_DbSecdep">[var_DbSecdep]</InArgument>
+                                            <InArgument x:TypeArguments="s:String[]" x:Key="in_WRNumbers">[var_WRNumbers]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_OcrMinHour">[var_OcrMinHour]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_DbRACode">[var_DbRACode]</InArgument>
+                                            <InOutArgument x:TypeArguments="scg:List(x:String)" x:Key="io_CalcAgreementItemList">[var_CalcAgreementItemList]</InOutArgument>
+                                            <InOutArgument x:TypeArguments="scg:List(x:String)" x:Key="io_CalcPrincipalLessWhtList">[var_CalcPrincipalLessWhtItemList]</InOutArgument>
+                                            <InOutArgument x:TypeArguments="scg:List(x:String)" x:Key="io_CalcRentMonthVATList">[var_CalcRentMonthVATItemList]</InOutArgument>
+                                            <OutArgument x:TypeArguments="x:String" x:Key="out_SecDepPrincipal">[var_SecDepPrincipal]</OutArgument>
+                                            <OutArgument x:TypeArguments="x:String" x:Key="out_SecDepTotal">[var_SecDepTotal]</OutArgument>
+                                            <OutArgument x:TypeArguments="x:String" x:Key="out_DpPrincipal">[var_DpPrincipal]</OutArgument>
+                                            <OutArgument x:TypeArguments="x:String" x:Key="out_DpTotal">[var_DpTotal]</OutArgument>
+                                          </ui:InvokeWorkflowFile.Arguments>
+                                          <sap:WorkflowViewStateService.ViewState>
+                                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            </scg:Dictionary>
+                                          </sap:WorkflowViewStateService.ViewState>
+                                        </ui:InvokeWorkflowFile>
+                                        <FlowStep.Next>
+                                          <FlowStep x:Name="__ReferenceID5">
+                                            <sap:WorkflowViewStateService.ViewState>
+                                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                <av:Point x:Key="ShapeLocation">190,894.5</av:Point>
+                                                <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+                                              </scg:Dictionary>
+                                            </sap:WorkflowViewStateService.ViewState>
+                                            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Bussiness Rule Exception" sap:VirtualizedContainerService.HintSize="332,88" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_87" UnSafe="False" WorkflowFileName="General\General - Business Exception Handler.xaml">
+                                              <ui:InvokeWorkflowFile.Arguments>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_WRType">[var_DbRAType]</InArgument>
+                                                <InArgument x:TypeArguments="ui:DatabaseConnection" x:Key="in_DBConnection">[in_DBConnection]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_WRDirectory">[var_WRDirectory]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_OcrUEPrice">[var_OcrUEPrice]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_SapSecdep">[var_SapSecdep]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_DbSecdep">[var_DbSecdep]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_CalcRateMonthVAT">[var_CalcRateMonthVAT]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_SapCurrency">[var_SapCurrency]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_SapPayerID">[var_SapPayerID]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_SapPeriod">[var_SapPeriod]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_OcrPeriod">[var_OcrPeriod]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_OcrSerialNumber">[var_OcrSerialNumber]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_ICMStatus">[var_ICMStatus]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_RequestID">[var_RequestID]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_DbBiayaMobilisasi">[var_DbBiayaMobilisasi]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_DbDownPayment">[var_DbDownPayment]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_OcrTop">[var_OcrTop]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_DbRAType">[var_DbRAType]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_SapBusinessArea">[var_SapBusinessArea]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_SapTermsOfPayment">[var_DTOrderTrack.Rows(0)("Terms of Payment").ToString()]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_OcrTransactionAmount">[var_OcrTransactionAmount]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_OcrAccountNumber">[var_OcrAccountNumber]</InArgument>
+                                                <InArgument x:TypeArguments="sd:DataTable" x:Key="in_DTSap">[var_DTOrderTrack]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_SapPayerName">[var_SapPayerName]</InArgument>
+                                                <InArgument x:TypeArguments="s:String[]" x:Key="in_WRNumbers">[var_WRNumbers]</InArgument>
+                                                <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[in_Config]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_SapTopDescription">[var_SapTopDescription]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_DbRACode">[var_DbRACode]</InArgument>
+                                                <InArgument x:TypeArguments="scg:List(x:String)" x:Key="in_CalcAgreementItemList">[var_CalcAgreementItemList]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_OcrPayerID">[var_DbPayerID]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_OcrSecurityDeposit">[var_OcrSecurityDeposit]</InArgument>
+                                                <InArgument x:TypeArguments="scg:List(x:String)" x:Key="in_CalcRentMonthVATItemList">[var_CalcRentMonthVATItemList]</InArgument>
+                                                <InArgument x:TypeArguments="scg:List(x:String)" x:Key="in_CalcPrincipalLessWhtItemList">[var_CalcPrincipalLessWhtItemList]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_ICMPartyName">[var_ICMPartyName]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_DbContractNumber">[var_DbContractNumber]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_AgingOverdue">[var_AgingOverdue]</InArgument>
+                                                <InArgument x:TypeArguments="x:Int32" x:Key="in_DbSecdepTotal">[var_DbSecdepTotal]</InArgument>
+                                                <InArgument x:TypeArguments="x:Int32" x:Key="in_DbBiayaMobilisasiTotal">[var_DbBiayaMobilisasiTotal]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_DocSecdep">[var_DbDocSecdep]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_DocDp">[var_DbDocDp]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_DocMobilisasi">[var_DbDocMobilisasi]</InArgument>
+                                                <InArgument x:TypeArguments="sd:DataTable" x:Key="in_DBSODetail">[var_DTSODetail]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_SecDepPrincipal">[var_SecDepPrincipal]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_SecDepTotal">[var_SecDepTotal]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_CalcRentMonth">[var_CalcRateMonth]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_DbRequestDate">[var_DbRequestDate]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_DpTotal">[var_DpTotal]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_DpPrincipal">[var_DpPrincipal]</InArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="in_SapGetPDG">[var_SapGetPDG]</InArgument>
+                                              </ui:InvokeWorkflowFile.Arguments>
+                                            </ui:InvokeWorkflowFile>
+                                          </FlowStep>
+                                        </FlowStep.Next>
+                                      </FlowStep>
+                                    </FlowStep.Next>
+                                  </FlowStep>
+                                </FlowStep.Next>
+                              </FlowStep>
+                            </FlowStep.Next>
+                          </FlowStep>
+                        </FlowStep.Next>
+                      </FlowStep>
+                    </FlowStep.Next>
+                  </FlowStep>
+                </FlowStep.Next>
+              </FlowStep>
+            </FlowStep.Next>
+          </FlowStep>
+        </FlowStep.Next>
+      </FlowStep>
+      <x:Reference>__ReferenceID0</x:Reference>
+      <x:Reference>__ReferenceID1</x:Reference>
+      <x:Reference>__ReferenceID2</x:Reference>
+      <x:Reference>__ReferenceID3</x:Reference>
+      <x:Reference>__ReferenceID4</x:Reference>
+      <x:Reference>__ReferenceID5</x:Reference>
+      <x:Reference>__ReferenceID6</x:Reference>
+      <x:Reference>__ReferenceID7</x:Reference>
+      <x:Reference>__ReferenceID8</x:Reference>
+    </Flowchart>
+  </Sequence>
+</Activity>
